@@ -1,0 +1,28 @@
+1. Setting up ELK.
+
+- Execute setup.sh script to set necessary permissions for log and data directories.
+- Run docker-compose up -d (or without -d for debugging) 
+- It will start elasticsearch, elasticalert, kibana and logstash on your machine.
+- Logstash will listen on 5044 for incoming beats and Kibana will listen on 5061 for its webserver.
+- To check if it is installed successfully, open localhost:5061 and you should see Kibana interface.
+
+
+2. Setting up Filebeat
+
+- Execute setup.sh script to set necessary permissions for config and data files/directories.
+- open docker-compose.yml in filebeat-setup folder.
+- Map the tomcat log directory to /usr/share/filebeat/logs/tomcat directory
+- start docker-compose up -d (or without -d for debugging)
+- open filbeat-setup/filebeat/filebeat.yml and change the IP of the machine where logstash is running. 127.0.0.1 for localhost. (sample given below) 
+
+output.logstash:
+  # The Logstash hosts
+  enabled: true
+  hosts: ["192.168.142.200:5044"]
+  index: filebeat_logs
+
+
+3. To check if filebeat is correctly sending the data to ELK.
+- Make sure that ELK is up and running
+- Make sure that filebeat is up and running
+- On Kibana dashboard click on Discover tab and you should see a set of indices 
