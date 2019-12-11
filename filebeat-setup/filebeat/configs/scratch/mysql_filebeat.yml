@@ -1,0 +1,49 @@
+- type: log
+
+  # Change to true to enable this input configuration.
+  enabled: true
+
+  # Paths that should be crawled and fetched. Glob based paths.
+  paths:
+       - "/home/pmm/pmm-deploy/docker/tomcat/logs/pmm--*.log" #path to tomcat log files coming out from the docker.  
+
+  # Exclude lines. A list of regular expressions to match. It drops the lines that are
+  # matching any regular expression from the list.
+  #exclude_lines: ['^DBG']
+
+  # Include lines. A list of regular expressions to match. It exports the lines that are
+  # matching any regular expression from the list.
+  #include_lines: ['^ERR', '^WARN']
+
+  # Exclude files. A list of regular expressions to match. Filebeat drops the files that
+  # are matching any regular expression from the list. By default, no files are dropped.
+  #exclude_files: ['.gz$']
+
+  # Optional additional fields. These fields can be freely picked
+  # to add additional information to the crawled log files for filtering
+  fields:
+     app: tomcat  #this field will help in logstash to direct the parsing strategy 
+     #client: nymag # no need to specify now as we can extract it from the file name.
+     #server: i5 # no need to specify it now as we can extract it t from the file name
+
+
+  ### Multiline options
+ 
+  # Multiline can be used for log messages spanning multiple lines. This is common
+  # for Java Stack Traces or C-Line Continuation
+ 
+  # The regexp Pattern that has to be matched. The example pattern matches all lines starting with [
+  #multiline.pattern: ^\[. As we use log4j logger in our app, there every line starts with date.. as specified from the pattern of log statements.
+  multiline.pattern: '^([0-9][0-9][ ])' 
+  
+  # Defines if the pattern set under pattern should be negated or not. Default is false.
+  multiline.negate: true 
+
+ 
+  # Match can be set to "after" or "before". It is used to define if lines should be append to a pattern
+  # that was (not) matched before or after or as long as a pattern is not matched based on negate.
+  # Note: After is the equivalent to previous and before is the equivalent to to next in Logstash
+  multiline.match: after
+
+
+

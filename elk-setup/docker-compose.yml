@@ -1,0 +1,82 @@
+version: '3'
+services:
+  pmm-elastalert:
+    container_name: pmm-elastalert
+    image: bitsensor/elastalert:3.0.0-beta.0
+    links:
+    - pmm-elasticsearch
+    logging:
+      options:
+        max-file: "2"
+        max-size: "100m"
+    volumes:
+    - ./elastalert/elastalert.yaml:/opt/elastalert/config.yaml
+    - ./elastalert/config.json:/opt/elastalert-server/config/config.json
+    - ./elastalert/rules:/opt/elastalert/rules
+    - ./elastalert/rule_templates:/opt/elastalert/rule_templates
+  pmm-elasticsearch:
+    build:
+      context: elasticsearch/
+      dockerfile: Dockerfile
+    container_name: pmm-elasticsearch
+    logging:
+      options:
+        max-file: "2"
+        max-size: "100m"
+    environment:
+    - cluster.name=tg-cluster
+    - discovery.type=single-node
+    - bootstrap.memory_lock=true
+    - xpack.security.enabled=true
+    - ES_JAVA_OPTS=-Xms4g -Xmx4g
+    ulimits:
+      memlock:
+        hard: -1
+        soft: -1
+      nofile:
+        hard: 65536
+        soft: 65536
+    volumes:
+    - ./elasticsearch/data:/usr/share/elasticsearch/data:rw
+    - ./elasticsearch/logs:/usr/share/elasticsearch/logs:rw
+  pmm-kibana:
+    build:
+      context: kibana/
+      dockerfile: Dockerfile
+    container_name: pmm-kibana
+    logging:
+      options:
+        max-file: "2"
+        max-size: "100m"
+    links:
+    - pmm-elasticsearch
+    - pmm-elastalert
+    volumes:
+    - ./kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
+    ports:
+    - 5601:5601
+  pmm-logstash:
+    build:
+      context: logstash/
+      dockerfile: Dockerfile
+    container_name: pmm-logstash
+    logging:
+      options:
+        max-file: "2"
+        max-size: "100m"
+    #restart: unless-stopped    
+    environment:
+    - xpack.monitoring.elasticsearch.url="http://pmm-elasticsearch:9200"
+    - LOG_LEVEL="debug"
+    - xpack.monitoring.enabled=true
+    - xpack.monitoring.elasticsearch.username=elastic
+    - xpack.monitoring.elasticsearch.password=AL19zero1hashpm
+    links:
+    - pmm-elasticsearch
+    ports:
+    - 5044:5044
+    volumes:
+    - ./logstash/data:/usr/share/logstash/data:rw
+    - ./logstash/logs:/usr/share/logstash/logs:rw
+    - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
+    - ./logstash/pipelines.yml:/usr/share/logstash/config/pipelines.yml
