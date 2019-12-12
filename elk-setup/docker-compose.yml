@@ -70,7 +70,7 @@ services:
     - LOG_LEVEL="debug"
     - xpack.monitoring.enabled=true
     - xpack.monitoring.elasticsearch.username=elastic
-    - xpack.monitoring.elasticsearch.password=AL19zero1hashpm
+    - xpack.monitoring.elasticsearch.password=test123
     links:
     - pmm-elasticsearch
     ports:
