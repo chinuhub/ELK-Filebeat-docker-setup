@@ -132,7 +132,7 @@ setup.kibana:
 output.logstash:
   # The Logstash hosts
   enabled: true
-  hosts: ["192.168.142.200:5044"]
+  hosts: ["10.14.4.199:5044"]
   index: filebeat_logs
 
   # Optional SSL. By default is off.
@@ -157,7 +157,7 @@ processors:
 
 # Sets log level. The default log level is info.
 # Available log levels are: error, warning, info, debug
-logging.level: debug 
+logging.level: info 
 
 # At debug level, you can selectively enable logging only for some components.
 # To enable all selectors use ["*"]. Examples of other selectors are "beat",

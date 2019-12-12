@@ -5,7 +5,7 @@
 
   # Paths that should be crawled and fetched. Glob based paths.
   paths:
-          - "/usr/share/filebeat/logs/tomcat/*.log"
+          - "/usr/share/filebeat/logs/tomcat/pmm*.log*"
 
   # Exclude lines. A list of regular expressions to match. It drops the lines that are
   # matching any regular expression from the list.

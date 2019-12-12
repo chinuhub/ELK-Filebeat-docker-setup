@@ -12,6 +12,6 @@ services:
     - ./filebeat/configs:/usr/share/filebeat/configs
     - ./filebeat/data:/usr/share/filebeat/data
     - ./filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml
-    #- ./tomcat/logs:/usr/share/filebeat/logs/tomcat (map tomcat log directory to this location)
+    - /Users/hangal:/usr/share/filebeat/logs/tomcat # (map tomcat log directory to this location)
     #- ./nginx/logs:/usr/share/filebeat/logs/nginx
 version: '3'
