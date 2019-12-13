@@ -30,7 +30,12 @@ services:
     - discovery.type=single-node
     - bootstrap.memory_lock=true
     - xpack.security.enabled=false
-    - ES_JAVA_OPTS=-Xms2g -Xmx2g
+    #ES complains if the free space available on the machine is less. This is to reduce that limit.
+    - cluster.routing.allocation.disk.threshold_enabled=true
+    - cluster.routing.allocation.disk.watermark.flood_stage=200mb
+    - cluster.routing.allocation.disk.watermark.low=500mb
+    - cluster.routing.allocation.disk.watermark.high=300mb
+    - ES_JAVA_OPTS=-Xms4g -Xmx4g
     ulimits:
       memlock:
         hard: -1
