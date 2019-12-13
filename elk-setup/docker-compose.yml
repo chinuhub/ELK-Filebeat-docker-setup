@@ -23,6 +23,8 @@ services:
       options:
         max-file: "2"
         max-size: "100m"
+    ports:
+     - 9200:9200
     environment:
     - cluster.name=tg-cluster
     - discovery.type=single-node
